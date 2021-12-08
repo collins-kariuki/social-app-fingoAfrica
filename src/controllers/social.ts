@@ -1,24 +1,40 @@
 import { Request, Response, NextFunction } from "express";
-import axios, { AxiosResponse } from "axios";
-
-interface User {
-  fullName: String;
-  email: String;
-  password: String;
-  timestamp: String;
-}
+import pool from "./dbconfig/dbconnector";
 
 // adding a user
-const addUser = async (req: Request, res: Response, next: NextFunction) => {
+const createUser = (request: Request, response: Response) => {
   // get the data from req.body
-  let fullName: string = req.body.fullName;
-  let email: string = req.body.email;
-  let pasword: string = req.body.password;
+  const {
+    fullName,
+    email,
+    password,
+  }: { fullName: String; email: String; password: String } = request.body;
 
   // add the user
+  pool.query(
+    "INSERT INTO users (fullName, email, password) VALUES ($1, $2, $3)",
+    [fullName, email, password],
+    (error: any, results: any) => {
+      if (error) {
+        throw error;
+      }
+      response.status(201).send(`User added : ${results.insertId}`);
+    }
+  );
+};
 
-  // return response
-  return res.status(200).json({
-    sucess: "resp",
-  });
+// getting a user
+const getLoggedinUser = (request: Request, response: Response) => {
+  const email = parseInt(request.params.email);
+
+  pool.query(
+    "SELECT * FROM users WHERE email = $1",
+    [email],
+    (error: any, results: { rows: any }) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).json(results.rows);
+    }
+  );
 };
