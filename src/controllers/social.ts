@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import pool from "./dbconfig/dbconnector";
+import pool from "../dbconfig/dbconnector";
 
 // adding a user
 const createUser = (request: Request, response: Response) => {
@@ -38,3 +38,5 @@ const getLoggedinUser = (request: Request, response: Response) => {
     }
   );
 };
+
+export default { createUser, getLoggedinUser };
