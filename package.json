@@ -2,9 +2,10 @@
   "name": "social-media-fingoafrica",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "source/server.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon source/server.ts",
+    "build": "rm -rf build/ && prettier --write source/ && tsc"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +18,7 @@
     "express": "^4.17.1",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.15",
+    "pg": "^8.7.1",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.2"
   }
