@@ -15,11 +15,6 @@ const createUser = async (request: Request, response: Response) => {
     email,
     password,
   }: { fullName: string; email: string; password: string } = request.body;
-  console.log(fullName);
-  console.log(passwordStrength(password).id);
-
-  timestamp = +new Date();
-  console.log(timestamp);
 
   // Encryption of the string password
   bcrypt.genSalt(10, function (err, Salt) {
@@ -37,18 +32,19 @@ const createUser = async (request: Request, response: Response) => {
       throw { Error: "Incomplete details" };
     }
 
-    pool.query(
-      "SELECT email FROM users WHERE email = $1",
+    //Unique Email checking
+    const client = await pool.connect();
+    client.query(
+      "SELECT * FROM users WHERE email = $1",
       [email],
       (error: any, results: { rows: Array<JSON> }) => {
         if (error) {
           throw error;
         }
-        const user = results.rows[0];
-        if (user) {
-          console.log(user);
-          throw "";
+
+        if (results.rows[0]) {
           response.status(400).send("User with that email exists");
+          throw { Error: "User with that email exists" };
         }
       }
     );
@@ -58,10 +54,6 @@ const createUser = async (request: Request, response: Response) => {
     if (pass_strength.id == 0 || pass_strength.id == 1) {
       throw { Error: " Password is " + pass_strength.value };
     }
-
-    //Unique Email checking
-    const client = await pool.connect();
-
     // adding a user
     await client.query(
       "INSERT INTO users (fullName, email, password) VALUES ($1, $2, $3)",
