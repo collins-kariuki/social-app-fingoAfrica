@@ -1,5 +1,4 @@
-import { Request, Response, NextFunction } from "express";
-import { createConnection, Connection } from "typeorm";
+import { Request, Response } from "express";
 import connection from "../server";
 import { User } from "../entity/User";
 import jwt from "jsonwebtoken";
