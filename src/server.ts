@@ -2,9 +2,11 @@ import http from "http";
 import express, { Express } from "express";
 import morgan from "morgan";
 import routes from "./routes/socialRoutes";
+import { createConnection } from "typeorm";
 
 const router: Express = express();
-
+let connection = createConnection();
+export default connection;
 /** Logging */
 router.use(morgan("dev"));
 /** Parse the request */

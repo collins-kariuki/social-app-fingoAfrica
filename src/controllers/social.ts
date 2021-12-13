@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { createConnection, Connection } from "typeorm";
+import connection from "../server";
 import { User } from "../entity/User";
 import jwt from "jsonwebtoken";
 import config from "../config/config";
@@ -35,14 +36,13 @@ const createUser = async (request: Request, response: Response) => {
       .catch((error) => console.log(error));
 
     // adding a user
-    createConnection()
+    connection
       .then(async (connection) => {
         let user = new User();
         user.fullName = fullName;
         user.email = email;
         user.password = hashedPassword;
         user.timestamp = new Date();
-        console.log(user.timestamp);
 
         await connection.manager.save(user).then((user) => {
           response.status(200).send({ "User added ": user.fullName });
@@ -52,7 +52,7 @@ const createUser = async (request: Request, response: Response) => {
         //Duplicate email check
         if (error.code == "23505") {
           response
-            .status(404)
+            .status(400)
             .send({ "Error ": "Account with that Email exists" });
         } else {
           response.status(408).send({ "Error ": error });
@@ -69,7 +69,7 @@ const login = async (request: Request, response: Response) => {
     response.status(400).send({ Error: "Incomplete details" });
   }
   //Get user from database.
-  createConnection()
+  connection
     .then(async (connection) => {
       let userRepository = connection.getRepository(User);
 
@@ -79,14 +79,13 @@ const login = async (request: Request, response: Response) => {
           // Password checking
           bcrypt.compare(password, user[0].password).then((result) => {
             if (result == true) {
-              console.log(result);
               const token = jwt.sign(
                 { fullName: user[0].fullName, email: user[0].email },
                 config.jwtSecret,
                 { expiresIn: "1hr" }
               );
               response.send(token);
-            } else response.status(400).send({ Error: "Bad credentials" });
+            } else response.status(401).send({ Error: "Bad credentials" });
           });
         })
         .catch((error) => console.log(error));
