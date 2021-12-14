@@ -15,8 +15,7 @@
 
 ---
 
-<p align="center"> Few lines describing your project.
-    <br> 
+<p align="center"> <br>
 </p>
 
 ## 📝 Table of Contents
