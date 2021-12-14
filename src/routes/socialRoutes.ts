@@ -1,10 +1,10 @@
 import express from "express";
-import controller from "../controllers/social";
+import controllers from "../middleware/contollers";
 import { checkJwt } from "../middleware/checkJwt";
 const router = express.Router();
 
-router.post("/signup", controller.createUser);
-router.post("/login", controller.login);
-router.get("/getuser", [checkJwt], controller.getLoggedinUser);
+router.post("/signup", controllers.signUp);
+router.post("/login", controllers.login);
+router.get("/getuser", [checkJwt], controllers.getUser);
 
 export = router;

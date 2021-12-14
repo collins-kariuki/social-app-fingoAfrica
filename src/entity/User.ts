@@ -15,5 +15,5 @@ export class User {
   password: string;
 
   @Column({ type: "timestamp", nullable: true })
-  timestamp: Date;
+  created: Date;
 }
