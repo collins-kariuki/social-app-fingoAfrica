@@ -32,7 +32,8 @@
 A mini social media api that can register users login and return details of the logged in user.
 
 To be added
-Friend requests
+
+- Friend requests
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
 
