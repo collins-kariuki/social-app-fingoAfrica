@@ -29,7 +29,7 @@
 
 ## 🧐 About <a name = "about"></a>
 
-A mini social media api that canregister users login and return details of the logged in user.
+A mini social media api that can register users login and return details of the logged in user.
 
 To be added
 Friend requests
